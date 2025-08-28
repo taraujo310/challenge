@@ -1,5 +1,5 @@
 class BooksController < ApplicationController
-  before_action :set_book, only: %i[ show edit update destroy ]
+  before_action :set_book, only: %i[ show edit update destroy reserve ]
 
   # GET /books or /books.json
   def index
@@ -57,6 +57,17 @@ class BooksController < ApplicationController
     end
   end
 
+  def new_reservation
+    @reservation = Reservation.new(book_id: params[:book_id])
+  end
+
+  def reserve
+    user = User.find_by_email params[:user_email]
+    reservation = Reservation.new(book: book, user: user)
+
+    redirect_to books_path, notice: "Book was successfully reserved for #{user.email}"
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_book
@@ -66,5 +77,9 @@ class BooksController < ApplicationController
     # Only allow a list of trusted parameters through.
     def book_params
       params.require(:book).permit(:title, :author)
+    end
+
+    def reservation_params
+      params.permit(:user_email)
     end
 end

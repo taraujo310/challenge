@@ -9,4 +9,6 @@
     <%= book.author %>
   </p>
 
+  <%= link_to 'Reserve', path: book_new_reservation_path(book.id) %>
+
 </div>
